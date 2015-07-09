@@ -37,7 +37,7 @@ public class MainActivity extends ActionBarActivity {
         TextView getApiKey = (TextView) findViewById(R.id.getApiKey);
         final EditText apiKey = (EditText) findViewById(R.id.apiKey);
         apiKey.setText(Config.getApiKey());
-        getApiKey.setText("Your API key can be found at https://sr.ht/ under API Info");
+        getApiKey.setText("Your API key can be found at https://sr.ht under API Info");
         Linkify.addLinks(getApiKey, Linkify.ALL);
         Button set = (Button)findViewById(R.id.set);
         set.setOnClickListener(new View.OnClickListener() {
