@@ -1,6 +1,8 @@
 package io.github.wiiam.srhtapp;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -54,6 +56,10 @@ public class Share extends Activity {
                     Toast.makeText(getApplicationContext(),"Uploading file...",Toast.LENGTH_SHORT).show();
                     String path = parseUriToFilename(uri);
                     String hostedurl = upload(path);
+                    if(hostedurl != null) {
+                        ClipData cd = ClipData.newPlainText("sr.ht link", hostedurl);
+                        ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).setPrimaryClip(cd);
+                    }
                 }
             }
         }
@@ -99,7 +105,7 @@ public class Share extends Activity {
             String lineEnd = "\r\n";
             FileInputStream fileInputStream = new FileInputStream(file);
 
-            
+
             int fileSize = (int)file.length();
             byte[] fileContent = new byte[fileSize];
             fileInputStream.read(fileContent);//, 0, fileSize);

@@ -1,19 +1,24 @@
 package io.github.wiiam.srhtapp;
 
+import android.net.Uri;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.json.JSONException;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+
 import io.github.wiiam.srhtapp.config.Config;
 
 
@@ -33,11 +38,16 @@ public class MainActivity extends ActionBarActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Toast.makeText(getApplicationContext(),"test",Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(),"test",Toast.LENGTH_LONG).show();
+        ImageView bgimage = (ImageView)findViewById(R.id.bgimage);
+        int imageNumber = (int)Math.ceil(Math.random()*9)+1;
+        Log.d("IMAGEID","" + imageNumber);
+        //bgimage.setImageResource(R.drawable.2);
+
+
         TextView getApiKey = (TextView) findViewById(R.id.getApiKey);
         final EditText apiKey = (EditText) findViewById(R.id.apiKey);
         apiKey.setText(Config.getApiKey());
-        getApiKey.setText("Your API key can be found at https://sr.ht under API Info");
         Linkify.addLinks(getApiKey, Linkify.ALL);
         Button set = (Button)findViewById(R.id.set);
         set.setOnClickListener(new View.OnClickListener() {
