@@ -47,7 +47,7 @@ public class Share extends Activity {
                 Uri uri = (Uri) extras.getParcelable(Intent.EXTRA_STREAM);
 
                 if (uri != null) {
-                    id(Config.getApiKey() == "" || Config.getApiKey() == null){
+                    if(Config.getApiKey() == "" || Config.getApiKey() == null){
                         Toast.makeText(getApplicationContext(),"API key not set",Toast.LENGTH_SHORT).show();
                         return;
                     }
