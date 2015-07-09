@@ -79,7 +79,7 @@ public class Share extends Activity {
 
     private String upload(String filepath) {
         String filename = filepath.split("/")[filepath.split("/").length-1];
-        String result = sendRequest("https://sr.ht/api/upload", "a23b12e837da89b8c3cbb3b45c408020561a2ade65168309a4c72d7b778d4089", new File(filepath), filename);
+        String result = sendRequest("https://sr.ht/api/upload", Config.getApiKey(), new File(filepath), filename);
         Log.d(DEBUG_TAG, "RESULT: " + result);
         Toast.makeText(getApplicationContext(),result,Toast.LENGTH_SHORT).show();
         return result;
@@ -94,37 +94,20 @@ public class Share extends Activity {
 
 
     private String sendRequest(String url, String apikey, File file, String fileField) {
-        HttpURLConnection httpConn = null;
-        StringBuilder httpContent = new StringBuilder();
-        String lineEnd = "\r\n";
-        byte[] fileContent = new byte[0];
-        int fileSize = 0;
-
         // trying to read file
-        if (file != null) {
-            try {
-                FileInputStream fileInputStream = new FileInputStream(file);
-
-                /*
-                httpContent.append(twoHyphens + REQUEST_BOUNDARY + lineEnd);
-                httpContent.append("Content-Disposition: form-data; key=\"" + apikey + "\"");
-                httpContent.append(apikey);
-                */
-
-
-                fileSize = fileInputStream.available();
-                fileContent = new byte[fileSize];
-                fileInputStream.read(fileContent, 0, fileSize);
-                fileInputStream.close();
-            }
-            catch (Exception e){
-                Log.d(DEBUG_TAG, "Exception occured: " + e.toString());
-            }
-        }
-
-        // trying to perform request
         try {
-            httpConn = (HttpURLConnection) new URL(url).openConnection();
+            String lineEnd = "\r\n";
+            FileInputStream fileInputStream = new FileInputStream(file);
+
+            Log.d(DEBUG_TAG,"FILE: " + file.toURI().getPath());
+            Log.d(DEBUG_TAG,"FILEEXISTS: " + file.exists());
+            int fileSize = (int)file.length();
+            byte[] fileContent = new byte[fileSize];
+            fileInputStream.read(fileContent);//, 0, fileSize);
+            fileInputStream.close();
+            System.out.write(fileContent);
+
+            HttpURLConnection httpConn = (HttpURLConnection) new URL(url).openConnection();
 
             if (httpConn != null) {
                 httpConn.setDoInput(true);
@@ -133,21 +116,25 @@ public class Share extends Activity {
                 //httpConn.setConnectTimeout(CONNECTION_TIMEOUT_STRING);
                 httpConn.setRequestMethod("POST");
 
-                if (file != null && httpContent.length() > 0) {
-                    httpConn.setRequestProperty("User-Agent", "Mozilla");
+                if (file != null) {
+                    //httpConn.setRequestProperty("User-Agent", "Mozilla");
                     httpConn.setRequestProperty("Connection", "Keep-Alive");
-                    httpConn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + REQUEST_BOUNDARY + ";key=" + apikey);
-                    httpConn.setRequestProperty("Content-Type", "multipart/form-data; key=" + apikey);
+                    httpConn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + REQUEST_BOUNDARY);// + "; key=" + apikey);
+                    //httpConn.setRequestProperty("Content-Type", "multipart/form-data; key=" + apikey);
+                    //httpConn.setRequestProperty("key" , apikey);
                     //httpConn.addRequestProperty("Content-Length", "" + fileSize);
                     //httpConn.connect();
 
                     DataOutputStream dos = new DataOutputStream(httpConn.getOutputStream());
-                    dos.writeBytes("Content-Type: multipart/form-data; key=" + apikey);
+                    //dos.writeBytes("--" + REQUEST_BOUNDARY + lineEnd);
+                    //dos.writeBytes("Content-Disposition: form-data; name=\"key\'" + lineEnd);
+                    //dos.writeBytes(apikey + lineEnd);
                     dos.writeBytes("--" + REQUEST_BOUNDARY + lineEnd);
                     dos.writeBytes("Content-Disposition: form-data; name=\"" + fileField + "\"; filename=\"" + file.getName() + "\"" + lineEnd);
-                    //dos.writeBytes("Content-Type: image/jpeg" + lineEnd);
+                    dos.writeBytes("Content-Type: image/jpeg" + lineEnd);
                     dos.writeBytes(lineEnd);
-                    //dos.write(fileContent, 0, fileSize);
+                    dos.write(fileContent, 0, fileSize);
+                    /*
                     FileInputStream fileInputStream = new FileInputStream(file);
                     int bytesRead = fileInputStream.read(fileContent, 0, fileSize);
 
@@ -155,13 +142,14 @@ public class Share extends Activity {
                         dos.write(fileContent, 0, bytesRead);
                         bytesRead = fileInputStream.read(fileContent, 0, fileSize);
                     }
+                    */
                     dos.writeBytes(lineEnd);
                     dos.writeBytes("--" + REQUEST_BOUNDARY + "--" + lineEnd);
                     dos.flush();
                     dos.close();
                 }
 
-                //httpConn.connect();
+                httpConn.connect();
 
                 int response = httpConn.getResponseCode();
                 BufferedReader rd;
@@ -180,18 +168,16 @@ public class Share extends Activity {
                 if (rd != null) {
                     rd.close();
                 }
+                Log.d(DEBUG_TAG,sb.toString());
+                httpConn.disconnect();
                 return sb.toString();
             } else {
                 Log.d(DEBUG_TAG, "Connection Error");
             }
+
         }
         catch (Exception e){
             Toast.makeText(getApplicationContext(), "Exception occured: " + e.toString(), Toast.LENGTH_SHORT).show();
-        }
-        finally {
-            if (httpConn != null) {
-                httpConn.disconnect();
-            }
         }
         return null;
     }
