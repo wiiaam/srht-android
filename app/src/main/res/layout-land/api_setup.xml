@@ -14,7 +14,7 @@
         android:id="@+id/apiKey"
         android:singleLine="true"
         android:inputType="textNoSuggestions"
-        android:layout_centerVertical="true"
+        android:layout_alignBottom="@+id/clear"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_toLeftOf="@+id/clear"
@@ -35,7 +35,7 @@
         android:text="sr.ht"
         android:id="@+id/title"
         android:textSize="100dp"
-        android:layout_above="@+id/clear"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -44,26 +44,26 @@
         android:layout_height="wrap_content"
         android:text="clear"
         android:id="@+id/clear"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/getApiKey"
+        android:layout_toStartOf="@+id/getApiKey"
+        android:layout_marginBottom="88dp" />
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Your API key can be found at sr.ht under API Info"
         android:id="@+id/getApiKey"
         android:gravity="center"
         android:linksClickable="true"
         android:longClickable="false"
-        android:layout_below="@+id/set"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/set"
+        android:layout_alignLeft="@+id/bgimage"
+        android:layout_alignStart="@+id/bgimage" />
 
     <ImageView
         android:id="@+id/bgimage"
@@ -73,12 +73,12 @@
         android:layout_alignParentBottom="true" />
 
     <TextView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Your API Key"
         android:id="@+id/apiKeyTitle"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true" />
+        android:layout_above="@+id/clear"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
