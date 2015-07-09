@@ -4,4 +4,9 @@
 
 Adds a share feature that uploads the file and shows the link to the uploaded file
 
+## Requires
+- Android > 4.0.3
+
+
+
 (currently not working)
