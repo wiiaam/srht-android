@@ -99,13 +99,11 @@ public class Share extends Activity {
             String lineEnd = "\r\n";
             FileInputStream fileInputStream = new FileInputStream(file);
 
-            Log.d(DEBUG_TAG,"FILE: " + file.toURI().getPath());
-            Log.d(DEBUG_TAG,"FILEEXISTS: " + file.exists());
+            
             int fileSize = (int)file.length();
             byte[] fileContent = new byte[fileSize];
             fileInputStream.read(fileContent);//, 0, fileSize);
             fileInputStream.close();
-            System.out.write(fileContent);
 
             HttpURLConnection httpConn = (HttpURLConnection) new URL(url).openConnection();
 
