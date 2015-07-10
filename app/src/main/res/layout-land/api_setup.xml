@@ -14,11 +14,12 @@
         android:id="@+id/apiKey"
         android:singleLine="true"
         android:inputType="textNoSuggestions"
-        android:layout_alignBottom="@+id/clear"
+        android:layout_alignBottom="@+id/clear2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/clear"
-        android:layout_toStartOf="@+id/clear" />
+        android:layout_toLeftOf="@+id/clear2"
+        android:layout_toStartOf="@+id/clear2"
+        android:hint="Your API Key"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -43,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="clear"
-        android:id="@+id/clear"
+        android:id="@+id/clear2"
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/getApiKey"
         android:layout_toStartOf="@+id/getApiKey"
@@ -72,13 +73,35 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true" />
 
-    <TextView
+    <Button
+        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Your API Key"
-        android:id="@+id/apiKeyTitle"
-        android:layout_above="@+id/clear"
-        android:layout_centerHorizontal="true" />
+        android:text="Clear"
+        android:id="@+id/clear"
+        android:layout_above="@+id/apiKey"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/url"
+        android:singleLine="true"
+        android:inputType="textNoSuggestions"
+        android:layout_above="@+id/apiKey"
+        android:layout_toLeftOf="@+id/clear2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="Custom url"/>
+
+    <ImageButton
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/qrReader"
+        android:src="@android:drawable/ic_menu_camera"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

@@ -9,24 +9,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.webkit.MimeTypeMap;
 import android.widget.Toast;
-
-import net.haxx.curl.CurlGlue;
-import net.haxx.curl.CurlWrite;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Scanner;
-
-import javax.net.ssl.HttpsURLConnection;
-
 import io.github.wiiam.srhtapp.config.Config;
 
 /**

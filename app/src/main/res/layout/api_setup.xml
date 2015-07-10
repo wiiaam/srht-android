@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="0dp"
@@ -17,25 +18,9 @@
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/clear"
-        android:layout_toStartOf="@+id/clear" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Set"
-        android:id="@+id/set"
-        android:layout_below="@+id/clear"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Your API Key"
-        android:id="@+id/apiKeyTitle"
-        android:layout_above="@+id/apiKey"
-        android:layout_centerHorizontal="true" />
+        android:layout_toLeftOf="@+id/clear2"
+        android:layout_toStartOf="@+id/clear2"
+        android:hint="Your API Key"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -52,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="clear"
-        android:id="@+id/clear"
+        android:id="@+id/clear2"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
@@ -66,10 +51,10 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/getApiKey"
-        android:layout_below="@+id/set"
         android:id="@+id/relativeLayout"
         android:layout_alignLeft="@+id/title"
-        android:layout_alignStart="@+id/title">
+        android:layout_alignStart="@+id/title"
+        android:layout_below="@+id/set">
         <ImageView
             android:id="@+id/bgimage"
             android:layout_width="wrap_content"
@@ -77,6 +62,7 @@
             android:layout_alignParentRight="true"
             android:layout_height="wrap_content"
             android:scaleType="fitXY"/>
+
     </RelativeLayout>
 
     <TextView
@@ -94,5 +80,44 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="10dp"
         android:layout_toLeftOf="@+id/set" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear"
+        android:id="@+id/clear"
+        android:layout_above="@+id/apiKey"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set"
+        android:id="@+id/set"
+        android:layout_below="@+id/clear2"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/url"
+        android:singleLine="true"
+        android:inputType="textNoSuggestions"
+        android:layout_above="@+id/apiKey"
+        android:layout_toLeftOf="@+id/clear2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="Custom url"/>
+
+    <ImageButton
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/qrReader"
+        android:src="@android:drawable/ic_menu_camera"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>
