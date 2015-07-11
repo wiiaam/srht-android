@@ -6,7 +6,3 @@ Adds a share feature that uploads the file and shows the link to the uploaded fi
 
 ## Requires
 - Android > 4.0.3
-
-
-
-(currently not working)
