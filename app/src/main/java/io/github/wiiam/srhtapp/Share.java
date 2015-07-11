@@ -3,20 +3,38 @@ package io.github.wiiam.srhtapp;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 import android.widget.Toast;
+
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Collection;
+
+import com.loopj.android.http.*;
+
+import org.apache.http.Header;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import io.github.wiiam.srhtapp.config.Config;
 
 /**
@@ -45,10 +63,11 @@ public class Share extends Activity {
                     }
                     Toast.makeText(getApplicationContext(),"Uploading file...",Toast.LENGTH_SHORT).show();
                     String path = parseUriToFilename(uri);
-                    String hostedurl = upload(path);
-                    if(hostedurl != null) {
-                        ClipData cd = ClipData.newPlainText("sr.ht link", hostedurl);
-                        ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).setPrimaryClip(cd);
+                    try {
+                        upload(path, intent.getType());
+                    }
+                    catch (Exception e) {
+                        Toast.makeText(getApplicationContext(), "Upload failed", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -73,106 +92,41 @@ public class Share extends Activity {
         return null;
     }
 
-    private String upload(String filepath) {
+    private void upload(String filepath, String mimetype) throws FileNotFoundException, IOException {
         String filename = filepath.split("/")[filepath.split("/").length-1];
-        String result = sendRequest("https://sr.ht/api/upload", Config.getApiKey(), new File(filepath), filename);
-        Log.d(DEBUG_TAG, "RESULT: " + result);
-        Toast.makeText(getApplicationContext(),result,Toast.LENGTH_SHORT).show();
-        return result;
-    }
+        RequestParams params = new RequestParams();
+        params.put("key", Config.getApiKey());
 
-
-
-    private final String REQUEST_BOUNDARY = "BKELWRNGPXMW";
-
-
-
-
-
-    private String sendRequest(String url, String apikey, File file, String fileField) {
-        // trying to read file
-        try {
-            String lineEnd = "\r\n";
-            FileInputStream fileInputStream = new FileInputStream(file);
-
-
-            int fileSize = (int)file.length();
-            byte[] fileContent = new byte[fileSize];
-            fileInputStream.read(fileContent);//, 0, fileSize);
-            fileInputStream.close();
-
-            HttpURLConnection httpConn = (HttpURLConnection) new URL(url).openConnection();
-
-            if (httpConn != null) {
-                httpConn.setDoInput(true);
-                httpConn.setDoOutput(true);
-                httpConn.setUseCaches(false);
-                //httpConn.setConnectTimeout(CONNECTION_TIMEOUT_STRING);
-                httpConn.setRequestMethod("POST");
-
-                if (file != null) {
-                    //httpConn.setRequestProperty("User-Agent", "Mozilla");
-                    httpConn.setRequestProperty("Connection", "Keep-Alive");
-                    httpConn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + REQUEST_BOUNDARY);// + "; key=" + apikey);
-                    //httpConn.setRequestProperty("Content-Type", "multipart/form-data; key=" + apikey);
-                    //httpConn.setRequestProperty("key" , apikey);
-                    //httpConn.addRequestProperty("Content-Length", "" + fileSize);
-                    //httpConn.connect();
-
-                    DataOutputStream dos = new DataOutputStream(httpConn.getOutputStream());
-                    //dos.writeBytes("--" + REQUEST_BOUNDARY + lineEnd);
-                    //dos.writeBytes("Content-Disposition: form-data; name=\"key\'" + lineEnd);
-                    //dos.writeBytes(apikey + lineEnd);
-                    dos.writeBytes("--" + REQUEST_BOUNDARY + lineEnd);
-                    dos.writeBytes("Content-Disposition: form-data; name=\"" + fileField + "\"; filename=\"" + file.getName() + "\"" + lineEnd);
-                    dos.writeBytes("Content-Type: image/jpeg" + lineEnd);
-                    dos.writeBytes(lineEnd);
-                    dos.write(fileContent, 0, fileSize);
-                    /*
-                    FileInputStream fileInputStream = new FileInputStream(file);
-                    int bytesRead = fileInputStream.read(fileContent, 0, fileSize);
-
-                    while (bytesRead > 0) {
-                        dos.write(fileContent, 0, bytesRead);
-                        bytesRead = fileInputStream.read(fileContent, 0, fileSize);
-                    }
-                    */
-                    dos.writeBytes(lineEnd);
-                    dos.writeBytes("--" + REQUEST_BOUNDARY + "--" + lineEnd);
-                    dos.flush();
-                    dos.close();
-                }
-
-                httpConn.connect();
-
-                int response = httpConn.getResponseCode();
-                BufferedReader rd;
-
-                if (httpConn.getErrorStream() == null) {
-                    rd = new BufferedReader(new InputStreamReader(httpConn.getInputStream()));
-                } else {
-                    rd = new BufferedReader(new InputStreamReader(httpConn.getErrorStream()));
-                }
-
-                StringBuffer sb = new StringBuffer();
-                String line;
-                while ((line = rd.readLine()) != null) {
-                    sb.append(line + "\n");
-                }
-                if (rd != null) {
-                    rd.close();
-                }
-                Log.d(DEBUG_TAG,sb.toString());
-                httpConn.disconnect();
-                return sb.toString();
-            } else {
-                Log.d(DEBUG_TAG, "Connection Error");
+        String url = Config.getUrl();
+        String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimetype);
+        if (extension != null) {
+            extension = "." + extension;
+        } else {
+            extension = "";
+            if (mimetype.equals("image/*")) {
+                extension = ".png"; // stupid guess, browsers can probably handle it anyway
             }
+        }
 
-        }
-        catch (Exception e){
-            Toast.makeText(getApplicationContext(), "Exception occured: " + e.toString(), Toast.LENGTH_SHORT).show();
-        }
-        return null;
+        InputStream stream = new FileInputStream(new File(filepath));
+        params.put("file", stream, filename + extension);
+
+        AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
+        client.post("https://" + url + "/api/upload", params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    Uri result = Uri.parse(response.getString("url"));
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("sr.ht URL", result.toString());
+                    clipboard.setPrimaryClip(clip);
+                    Intent launchBrowser = new Intent(Intent.ACTION_VIEW, result);
+                    startActivity(launchBrowser);
+                    Toast.makeText(getApplicationContext(), "File uploaded, URL copied to clipboard.", Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), "Upload failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }
