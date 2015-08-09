@@ -21,6 +21,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".QrScan"
+            android:noHistory="true">
+            <intent-filter>
+                <data android:scheme="srht" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <activity android:name=".Share" android:theme="@android:style/Theme.NoDisplay">
             <intent-filter >
                 <action android:name="android.intent.action.SEND" />

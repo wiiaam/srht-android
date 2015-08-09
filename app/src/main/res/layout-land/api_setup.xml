@@ -96,12 +96,13 @@
         android:hint="Custom url"/>
 
     <ImageButton
-        android:layout_marginBottom="@dimen/activity_horizontal_margin"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:id="@+id/qrReader"
+        android:background="@null"
         android:src="@android:drawable/ic_menu_camera"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

@@ -35,25 +35,23 @@ public class ApiSetup extends Activity{
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         loadConfig();
-
-        if(getIntent().getAction().equals("android.intent.action.VIEW")){
-            loadConfig();
-            Log.d(DEBUG_TAG,"Opened via link");
-            String data = getIntent().getDataString();
-            Log.d(DEBUG_TAG,data);
-            String[] dataSplit = data.split(":");
-            Log.d(DEBUG_TAG,"Length: " + dataSplit.length);
-            if(dataSplit.length != 3){
-                Toast.makeText(getApplicationContext(),"Incompatible URL",Toast.LENGTH_SHORT).show();
-            }
-            else{
-                Config.setUrl(dataSplit[1]);
-                Config.setApiKey(dataSplit[2]);
-                Toast.makeText(getApplicationContext(),"Your settings have been saved", Toast.LENGTH_SHORT).show();
+        if(getIntent().getAction() != null) {
+            if (getIntent().getAction().equals("android.intent.action.VIEW")) {
+                loadConfig();
+                Log.d(DEBUG_TAG, "Opened via link");
+                String data = getIntent().getDataString();
+                Log.d(DEBUG_TAG, data);
+                String[] dataSplit = data.split(":");
+                Log.d(DEBUG_TAG, "Length: " + dataSplit.length);
+                if (dataSplit.length != 3) {
+                    Toast.makeText(getApplicationContext(), "Incompatible URL", Toast.LENGTH_SHORT).show();
+                } else {
+                    Config.setUrl(dataSplit[1]);
+                    Config.setApiKey(dataSplit[2]);
+                    Toast.makeText(getApplicationContext(), "Your settings have been saved", Toast.LENGTH_SHORT).show();
+                }
             }
         }
-
-
         //Toast.makeText(getApplicationContext(),"test",Toast.LENGTH_LONG).show();
         ImageView bgimage = (ImageView)findViewById(R.id.bgimage);
         int imageNumber = (int)Math.ceil(Math.random() * 9);
@@ -82,6 +80,15 @@ public class ApiSetup extends Activity{
         final EditText apiKey = (EditText) findViewById(R.id.apiKey);
         final EditText url = (EditText) findViewById(R.id.url);
         apiKey.bringToFront();
+        ImageButton qrReader = (ImageButton) findViewById(R.id.qrReader);
+        qrReader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent qrscan = new Intent(getApplicationContext(),QrScan.class);
+                startActivity(qrscan);
+                loadConfig();
+            }
+        });
         String urltext = Config.getUrl();
         if(urltext.equals("")){
             urltext = "sr.ht";
@@ -143,5 +150,20 @@ public class ApiSetup extends Activity{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadConfig();
+        final EditText apiKey = (EditText) findViewById(R.id.apiKey);
+        final EditText url = (EditText) findViewById(R.id.url);
+        String urltext = Config.getUrl();
+        if(urltext.equals("")){
+            urltext = "sr.ht";
+            Config.setUrl(urltext);
+        }
+        apiKey.setText(Config.getApiKey());
+        url.setText(urltext);
     }
 }
