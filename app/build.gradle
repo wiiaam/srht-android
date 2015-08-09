@@ -5,7 +5,7 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "io.github.wiiam.srhtapp"
+        applicationId "io.github.wiiam.srhtandroid"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
