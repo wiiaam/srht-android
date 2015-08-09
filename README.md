@@ -2,7 +2,7 @@
 
 ### Android application for file sharing through [sr.ht](https://sr.ht)
 
-Play Store: https://play.google.com/store/apps/details?id=io.github.wiiam.srhtapp
+Play Store: https://play.google.com/store/apps/details?id=io.github.wiiam.srhtandroid
 
 Adds a share feature that uploads the file and shows the link to the uploaded file
 
