@@ -10,4 +10,4 @@ Adds a share feature that uploads the file and shows the link to the uploaded fi
 - Android > 4.0.3
 
 ## Screenshots
-<p><img src="https://sr.ht/4c75.png" width="200px"/> <img src="https://sr.ht/3eb4f.png" width="200px"/>
+<p><img src="https://sr.ht/T9K8.jpg" width="200px"/> <img src="https://sr.ht/sWZX.jpg" width="200px"/>
