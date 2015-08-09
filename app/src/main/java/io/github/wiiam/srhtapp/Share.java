@@ -40,7 +40,7 @@ public class Share extends Activity {
             if (extras.containsKey(Intent.EXTRA_STREAM)) {
                 // Get resource path
                 Uri uri = (Uri) extras.getParcelable(Intent.EXTRA_STREAM);
-
+                loadConfig();
                 if (uri != null) {
                     if(Config.getApiKey() == "" || Config.getApiKey() == null){
                         Toast.makeText(getApplicationContext(),"API key not set",Toast.LENGTH_SHORT).show();
@@ -113,5 +113,15 @@ public class Share extends Activity {
                 }
             }
         });
+    }
+    private void loadConfig(){
+        try {
+            Config.load(new File(getFilesDir(), "config.json"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
