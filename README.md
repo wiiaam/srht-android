@@ -11,3 +11,8 @@ Adds a share feature that uploads the file and shows the link to the uploaded fi
 
 ## Screenshots
 <p><img src="https://sr.ht/T9K8.jpg" width="200px" /> <img src="https://sr.ht/sWZX.jpg" width="200px"/>
+
+## License
+Copyright © 2015 William Howell
+
+All works are licensed under the terms of [the GPL v3](LICENSE).
