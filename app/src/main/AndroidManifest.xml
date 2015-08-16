@@ -13,15 +13,6 @@
         android:theme="@style/AppTheme" >
 
         <activity
-            android:name=".MainActivity"
-            android:label="sr.ht android" >
-
-            <intent-filter>
-                <action android:name="android.intent.action.ALL_APPS" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".QrScan"
             android:noHistory="true">
             <intent-filter>
