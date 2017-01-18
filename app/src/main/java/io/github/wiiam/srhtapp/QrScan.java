@@ -11,9 +11,7 @@ import javax.xml.transform.Result;
 import io.github.wiiam.srhtapp.config.Config;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-/**
- * Created by william on 9/08/15.
- */
+
 public class QrScan extends Activity implements ZXingScannerView.ResultHandler{
     private ZXingScannerView mScannerView;
     private static final String DEBUG_TAG = "QRSCANNER";
@@ -50,13 +48,13 @@ public class QrScan extends Activity implements ZXingScannerView.ResultHandler{
                 Log.v(DEBUG_TAG,"KEY: " + splitresult[2]);
                 Config.setUrl(splitresult[1]);
                 Config.setApiKey(splitresult[2]);
-                Toast.makeText(getApplicationContext(), "Your settings have been saved", Toast.LENGTH_SHORT);
+                Toast.makeText(getApplicationContext(), "Your settings have been saved", Toast.LENGTH_SHORT).show();
             }
             else throw new Exception("Not a srht link");
         }
         catch(Exception e){
             Log.v(DEBUG_TAG,"QR ADDRESS PARSE EXCEPTION " + e.toString());
-            Toast.makeText(getApplicationContext(), "Invalid QR Barcode", Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(), "Invalid QR Code", Toast.LENGTH_SHORT).show();
         }
         finish();
     }

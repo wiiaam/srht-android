@@ -22,9 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import io.github.wiiam.srhtapp.config.Config;
 
-/**
- * Created by william on 10/07/15.
- */
+
 public class ApiSetup extends Activity{
 
     private static final String DEBUG_TAG = "APISETUP-DEBUG";
